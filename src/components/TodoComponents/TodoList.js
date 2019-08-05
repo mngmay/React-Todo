@@ -7,9 +7,13 @@ import Todo from "./Todo";
 const TodoList = props => {
   return (
     <div className="todo-list">
-      {props.listdata.map(todo => (
-        <Todo todo={todo} key={todo.id} toggleTodo={props.toggleTodo} />
-      ))}
+      {props.todos.map(todo => {
+        if (todo.task.toLowerCase().includes(props.search.toLowerCase())) {
+          return (
+            <Todo todo={todo} key={todo.id} toggleTodo={props.toggleTodo} />
+          );
+        }
+      })}
     </div>
   );
 };

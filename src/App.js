@@ -1,6 +1,7 @@
 import React from "react";
 import TodoList from "./components/TodoComponents/TodoList";
 import TodoForm from "./components/TodoComponents/TodoForm";
+import Search from "./components/Search";
 
 import "./components/TodoComponents/Todo.css";
 
@@ -24,26 +25,38 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      listdata: data
+      todos: data,
+      todo: "",
+      search: ""
     };
   }
 
   toggleTodo = id => {
-    console.log(id);
-
     this.setState({
-      listdata: this.state.listdata.map(todo => {
+      todos: this.state.todos.map(todo => {
         if (todo.id === id) {
-          console.log(todo);
           return {
             ...todo,
             completed: !todo.completed
           };
         } else {
-          console.log(todo);
           return todo;
         }
       })
+    });
+  };
+
+  handleChanges = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  submitTodo = e => {
+    e.preventDefault();
+    this.addTodo(this.state.todo);
+    this.setState({
+      todo: ""
     });
   };
 
@@ -54,13 +67,13 @@ class App extends React.Component {
       completed: false
     };
     this.setState({
-      listdata: [...this.state.listdata, newTodo]
+      todos: [...this.state.todos, newTodo]
     });
   };
 
   clearCompleted = () => {
     this.setState({
-      listdata: this.state.listdata.filter(todo => !todo.completed)
+      todos: this.state.todos.filter(todo => !todo.completed)
     });
   };
 
@@ -68,8 +81,19 @@ class App extends React.Component {
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
-        <TodoList listdata={this.state.listdata} toggleTodo={this.toggleTodo} />
-        <TodoForm addTodo={this.addTodo} clearCompleted={this.clearCompleted} />
+        <Search search={this.state.search} handleChanges={this.handleChanges} />
+        <TodoList
+          todos={this.state.todos}
+          search={this.state.search}
+          toggleTodo={this.toggleTodo}
+        />
+        <TodoForm
+          addTodo={this.addTodo}
+          clearCompleted={this.clearCompleted}
+          handleChanges={this.handleChanges}
+          todo={this.state.todo}
+          submitTodo={this.submitTodo}
+        />
       </div>
     );
   }
