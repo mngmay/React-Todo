@@ -7,6 +7,7 @@ const Search = props => {
       name="search"
       placeholder="Search"
       onChange={props.handleChanges}
+      className="search-field"
     />
   );
 };
